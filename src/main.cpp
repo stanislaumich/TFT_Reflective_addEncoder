@@ -64,6 +64,37 @@ int color=RED;
 String menu[10]={"COLOR","CONTRAST","POWER","TEXT","M5","EXIT"};
 #define menun 6
 
+
+
+#define vx 50
+#define vy 50
+#define sz 2
+
+
+int selectvalue(int min,int max,int cur){
+ mylcd.Fill_Screen(BLACK); 
+ int t=cur;
+ mylcd.Set_Text_Size(3);
+ mylcd.Set_Text_colour(RED);  
+ mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);// x,y
+ while (1){
+  if (enc1.isRight()){
+   t<max?t++:t=t;
+   mylcd.Fill_Screen(BLACK);
+   mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
+   Serial.println(t);
+   }        
+if (enc1.isLeft()){
+    t>min?t--:t=t;
+    mylcd.Fill_Screen(BLACK);
+    mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
+   Serial.println(t);
+  }
+
+ }
+ return t;
+}
+
 #define tsize 2
 #define mh 17 //tsize*8+1 //2-16, 1-8
 
@@ -81,7 +112,6 @@ void showmenuall(String menu[], uint8_t num){
 }
 
 void showmenu(String menu[], uint8_t num,uint8_t cur,uint8_t crpr){ 
-  //mylcd.Fill_Screen(BLACK); 
   showmenuitem(menu[crpr],crpr,false);
   showmenuitem(menu[cur],cur,true);
 }
@@ -140,34 +170,6 @@ void Init_menu(void){
 }
 
 
-#define vx 50
-#define vy 50
-#define sz 2
-int selectvalue(int min,int max,int cur){
- mylcd.Fill_Screen(BLACK); 
- int t=cur;
- mylcd.Set_Text_Size(3);
- mylcd.Set_Text_colour(RED);  
- mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);// x,y
- while (1){
-  if (enc1.isRight()){
-   t<max?t++:t=t;
-   mylcd.Fill_Screen(BLACK);
-   mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
-   Serial.println(t);
-   }        
-if (enc1.isLeft()){
-    t>min?t--:t=t;
-    mylcd.Fill_Screen(BLACK);
-    mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
-   Serial.println(t);
-  }
-
- }
- return t;
-}
-
-
 
 
 void setup() 
@@ -183,33 +185,6 @@ void setup()
 void loop() 
 {
 
- //int res=getmenu(menu,6);
- int res=selectvalue(0,100,3);
- 
- /*if (enc1.isTurn()) {     // если был совершён поворот (индикатор поворота в любую сторону)
-    //showmenuitem("ABCD",1,true);
-    //showmenuitem("EFGH",2,true);
-  }
-  
-  if (enc1.isRight()){
-    //showmenuitem("ABCD",1,false);
-    //showmenuitem("EFGH",2,true);
-   Serial.println("Right");}         // если был поворот
-  if (enc1.isLeft()){
-    //showmenuitem("ABCD",1,true);
-    //showmenuitem("EFGH",2,false);
-   Serial.println("Left");
-  }
-  */
-
-  /*
-  if (enc1.isRightH()) Serial.println("Right holded"); // если было удержание + поворот
-  if (enc1.isLeftH()) Serial.println("Left holded");
-  
-  if (enc1.isPress()) Serial.println("Press");         // нажатие на кнопку (+ дебаунс)
-  if (enc1.isRelease()) Serial.println("Release");     // отпускание кнопки (+ дебаунс)
-  if (enc1.isHolded()) Serial.println("Holded");       // если была удержана и энк не поворачивался
-  //if (enc1.isHold()) Serial.println("Hold");         // возвращает состояние кнопки
-*/
-
+ int res=getmenu(menu,6);
+ //int res=selectvalue(0,100,3);
 }
