@@ -48,8 +48,6 @@ LCDWIKI_SPI mylcd(SSD1283A,10,9,8,A3); //hardware spi,cs,cd,reset
 #include "GyverEncoder.h"
 Encoder enc1(CLK, DT, SW, TYPE1);
 
-
-
 #define BLACK   0x0000
 #define BLUE    0x001F
 #define RED     0xF800
@@ -64,12 +62,9 @@ int color=RED;
 String menu[10]={"COLOR","CONTRAST","POWER","TEXT","M5","EXIT"};
 #define menun 6
 
-
-
 #define vx 50
 #define vy 50
 #define sz 2
-
 
 int selectvalue(int min,int max,int cur){
  mylcd.Fill_Screen(BLACK); 
@@ -90,7 +85,6 @@ if (enc1.isLeft()){
     mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
    Serial.println(t);
   }
-
  }
  return t;
 }
@@ -115,11 +109,11 @@ void showmenu(String menu[], uint8_t num,uint8_t cur,uint8_t crpr){
   showmenuitem(menu[crpr],crpr,false);
   showmenuitem(menu[cur],cur,true);
 }
-
+//------------------------------
 int getmenu(String menu[], uint8_t num){
 int cr=0;int crpr=1;
 showmenuall(menu,menun);
-//------------------------------
+
 bool exitcon=true;
 while(exitcon){
 if (enc1.isRight()){
@@ -134,8 +128,6 @@ if (crpr!=cr){
   crpr=cr;
  }
 if (enc1.isPress()) {
-
-
   Serial.println("Press");
    switch(cr){
     case 0: color=selectvalue(0,255,color);
@@ -153,10 +145,9 @@ if (enc1.isPress()) {
    }  
   } 
 }
-//------------------------------
 return cr;
 }
-
+//------------------------------
 void Init_menu(void){
  int t= menu[0].length();
  for(int i=0;i<menun;i++){
@@ -168,9 +159,6 @@ void Init_menu(void){
    }
  }
 }
-
-
-
 
 void setup() 
 {
