@@ -58,6 +58,7 @@ Encoder enc1(CLK, DT, SW, TYPE1);
 #define WHITE   0xFFFF
 
 int color=RED;
+volatile static uint8_t param = 99;
 
 String menu[10]={"COLOR","CONTRAST","POWER","TEXT","M5","EXIT"};
 #define menun 6
@@ -68,9 +69,10 @@ String menu[10]={"COLOR","CONTRAST","POWER","TEXT","M5","EXIT"};
 
 int selectvalue(int min,int max,int cur){
  mylcd.Fill_Screen(BLACK); 
- int t=cur;
+ uint8_t t=cur;
  mylcd.Set_Text_Size(3);
- mylcd.Set_Text_colour(RED);  
+ mylcd.Set_Text_colour(RED);
+ mylcd.Set_Text_Back_colour(0, 0, 0);  
  mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);// x,y
  bool act=true;
  while (act){
@@ -133,7 +135,7 @@ if (crpr!=cr){
 if (enc1.isPress()) {
   Serial.println("Press");
    switch(cr){
-    case 0: color=selectvalue(0,255,99);showmenuall(menu,menun);
+    case 0: param=selectvalue(0,255,param);showmenuall(menu,menun);
      break;
     case 1:
      break;
@@ -153,7 +155,7 @@ return cr;
 }
 //------------------------------
 void Init_menu(void){
- int t= menu[0].length();
+ uint8_t t= menu[0].length();
  for(int i=0;i<menun;i++){
   menu[i].length()>t?t=menu[i].length():t=t;
  }
