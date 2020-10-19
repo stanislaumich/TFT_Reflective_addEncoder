@@ -72,7 +72,8 @@ int selectvalue(int min,int max,int cur){
  mylcd.Set_Text_Size(3);
  mylcd.Set_Text_colour(RED);  
  mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);// x,y
- while (1){
+ bool act=true;
+ while (act){
   if (enc1.isRight()){
    t<max?t++:t=t;
    mylcd.Fill_Screen(BLACK);
@@ -85,6 +86,7 @@ if (enc1.isLeft()){
     mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
    Serial.println(t);
   }
+ act=!enc1.isPress(); 
  }
  return t;
 }
@@ -116,6 +118,7 @@ showmenuall(menu,menun);
 
 bool exitcon=true;
 while(exitcon){
+
 if (enc1.isRight()){
    cr<menun-1?cr++:cr=cr;
    Serial.println(menu[cr]);}        
@@ -130,7 +133,7 @@ if (crpr!=cr){
 if (enc1.isPress()) {
   Serial.println("Press");
    switch(cr){
-    case 0: color=selectvalue(0,255,color);
+    case 0: color=selectvalue(0,255,99);showmenuall(menu,menun);
      break;
     case 1:
      break;
@@ -145,6 +148,7 @@ if (enc1.isPress()) {
    }  
   } 
 }
+
 return cr;
 }
 //------------------------------
