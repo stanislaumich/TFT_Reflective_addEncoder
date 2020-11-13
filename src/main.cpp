@@ -3,16 +3,21 @@
 #include <LCDWIKI_SPI.h> //Hardware-specific library
 #include "colors.h"
 #include "GyverEncoder.h"
+#include <beep.h>
+
 
 #define CLK 6
 #define DT 5
 #define SW 4
+
+
 //------------------------
-Encoder enc1(CLK, DT, SW, TYPE1);
+Encoder enc1( DT,CLK, SW, TYPE1);
 LCDWIKI_SPI mylcd(SSD1283A,10,9,8,A3); //hardware spi,cs,cd,reset
 //------------------------
 
-volatile static uint8_t param = 99;
+volatile static uint8_t param1 = 250;
+volatile static uint8_t param2 = 250;
 
 String menu[10]={"COLOR","CONTRAST","POWER","TEXT","M5","EXIT"};
 #define menun 6
@@ -69,13 +74,13 @@ int selectvalue(int min,int max,int cur){
  mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);// x,y
  bool act=true;
  while (act){
-  if (enc1.isRight()){
+  if (enc1.isLeft()){
    t<max?t++:t=t;
    mylcd.Fill_Screen(BLACK);
    mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
    Serial.println(t);
    }        
-if (enc1.isLeft()){
+if (enc1.isRight()){
     t>min?t--:t=t;
     mylcd.Fill_Screen(BLACK);
     mylcd.Print_Number_Int(t, vx, vy, sz, 0,DEC);
@@ -108,15 +113,15 @@ if (crpr!=cr){
 if (enc1.isPress()) {
   Serial.println("Press");
    switch(cr){
-    case 0: param=selectvalue(0,255,param);showmenuall(menu,menun);
+    case 0: param1=selectvalue(1,255,param1);showmenuall(menu,menun);cr=0;
      break;
-    case 1:
-     break;
-    case 2:
+    case 1: param2=selectvalue(1,255,param2);showmenuall(menu,menun);cr=0;
+     break; 
+    case 2: longbeep();showmenuall(menu,menun);cr=0;
      break;  
     case 3:
      break;
-    case 4:
+    case 4:beep(250,250);delay(500);/*showmenuall(menu,menun);*/cr=0;
      break;
     case 5: exitcon=false; cr=-1;
      break;  
@@ -130,6 +135,8 @@ return cr;
 
 void setup() 
 {
+  initBeep(0,7);
+  longbeep();
   mylcd.Init_LCD();
   mylcd.Set_Rotation(4);//3
   mylcd.Fill_Screen(BLACK);
